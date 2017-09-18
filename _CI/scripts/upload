@@ -1,0 +1,26 @@
+#!/bin/bash --login
+set -e
+cd $(dirname $0)/../..
+
+. _CI/scripts/bootstrap
+
+rm -rf build dist
+
+# we want all these files to exist in the actual package
+cp .VERSION notifierlib/.VERSION
+cp LICENSE notifierlib/LICENSE
+cp AUTHORS.rst notifierlib/AUTHORS.rst
+cp CONTRIBUTING.rst notifierlib/CONTRIBUTING.rst
+cp HISTORY.rst notifierlib/HISTORY.rst
+cp README.rst notifierlib/README.rst
+cp USAGE.rst notifierlib/USAGE.rst
+
+python setup.py sdist bdist_egg upload -r pypi
+
+rm notifierlib/.VERSION
+rm notifierlib/LICENSE
+rm notifierlib/AUTHORS.rst
+rm notifierlib/CONTRIBUTING.rst
+rm notifierlib/HISTORY.rst
+rm notifierlib/README.rst
+rm notifierlib/USAGE.rst
