@@ -2,3 +2,4 @@ emaillib==0.1.3
 stopit==1.1.1
 Jinja2==2.8
 sleekxmpp==1.3.1
+python-telegram-bot==8.0

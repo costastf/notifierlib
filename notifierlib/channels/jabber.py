@@ -6,8 +6,7 @@ import sleekxmpp
 import logging
 from notifierlib.notifierlib import Channel
 
-__author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>,
-                Giuseppe Chiesa <mail@giuseppechiesa.it>'''
+__author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>, Argiris Gounaris <agounaris@gmail.com>'''
 __docformat__ = 'plaintext'
 __date__ = '''19-09-2017'''
 
@@ -115,6 +114,7 @@ class XmppGroupClient(sleekxmpp.ClientXMPP):
 class Jabber(Channel):
 
     def __init__(self,
+                 name,
                  user_id,
                  password,
                  recipient_id,
@@ -124,6 +124,7 @@ class Jabber(Channel):
                  ssl=True,
                  reattempt=False):
         super(Jabber, self).__init__()
+        self.name = name
         self.user = user_id
         self.password = password
         self.server = server
@@ -149,6 +150,7 @@ class Jabber(Channel):
 
 class JabberGroup(Channel):
     def __init__(self,
+                 name,
                  user_id,
                  password,
                  room,
@@ -160,6 +162,7 @@ class JabberGroup(Channel):
                  ssl=True,
                  reattempt=False):
         super(JabberGroup, self).__init__()
+        self.name = name
         self.user = user_id
         self.password = password
         self.nickname = nickname

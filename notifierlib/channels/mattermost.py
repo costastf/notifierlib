@@ -16,10 +16,11 @@ __date__ = '''19-09-2017'''
 
 class Mattermost(Channel):
 
-    def __init__(self, webhook_url, template=None):
+    def __init__(self, name, webhook_url, template=None):
 
         self._logger = logging.getLogger(self.__class__.__name__)
         super(Mattermost, self).__init__()
+        self.name = name
         self.url = webhook_url
         self.template = template
 
