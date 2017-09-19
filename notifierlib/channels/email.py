@@ -25,8 +25,7 @@ class Email(Channel):
                  port=587,
                  template=None,
                  content='text'):
-        super(Email, self).__init__()
-        self.name = name
+        super(Email, self).__init__(name)
         self.recipient = recipient
         self.sender = sender
         self.email = EasySender(smtp_address=smtp_address,

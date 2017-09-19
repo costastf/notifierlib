@@ -19,8 +19,7 @@ class Mattermost(Channel):
     def __init__(self, name, webhook_url, template=None):
 
         self._logger = logging.getLogger(self.__class__.__name__)
-        super(Mattermost, self).__init__()
-        self.name = name
+        super(Mattermost, self).__init__(name)
         self.url = webhook_url
         self.template = template
 

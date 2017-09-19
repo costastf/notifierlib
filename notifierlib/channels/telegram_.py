@@ -18,8 +18,7 @@ class Telegram(Channel):
     def __init__(self, name, token, chat_id, template=None, formating=None):
 
         self._logger = logging.getLogger(self.__class__.__name__)
-        super(Telegram, self).__init__()
-        self.name = name
+        super(Telegram, self).__init__(name)
         self.chat_id = chat_id
         self.template = template
         self.formating = self._get_formating(formating)

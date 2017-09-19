@@ -15,7 +15,7 @@ class Stdout(Channel):
     """A simple library to print to stdout"""
 
     def __init__(self, name):
-        self.name = name
+        super(Stdout, self).__init__(name)
 
     @staticmethod
     def _format_arguments(arguments):

@@ -30,11 +30,12 @@ TIMEOUT = 30
 class Channel(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self):
+    def __init__(self, name):
         self._logger = logging.getLogger('{base}.{suffix}'
                                          .format(base=LOGGER_BASENAME,
                                                  suffix=self.__class__.__name__)
                                          )
+        self.name = name
 
     @abc.abstractmethod
     def notify(self):

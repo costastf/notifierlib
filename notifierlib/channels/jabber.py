@@ -123,8 +123,7 @@ class Jabber(Channel):
                  tls=False,
                  ssl=True,
                  reattempt=False):
-        super(Jabber, self).__init__()
-        self.name = name
+        super(Jabber, self).__init__(name)
         self.user = user_id
         self.password = password
         self.server = server
@@ -161,8 +160,7 @@ class JabberGroup(Channel):
                  tls=False,
                  ssl=True,
                  reattempt=False):
-        super(JabberGroup, self).__init__()
-        self.name = name
+        super(JabberGroup, self).__init__(name)
         self.user = user_id
         self.password = password
         self.nickname = nickname
