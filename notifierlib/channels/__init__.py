@@ -5,6 +5,8 @@
 
 from email import Email
 from stdout import Stdout
+from jabber import Jabber, JabberGroup
+from mattermost import Mattermost
 
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
@@ -14,3 +16,6 @@ __date__ = '''18-09-2017'''
 # assert modules
 assert Email
 assert Stdout
+assert Jabber
+assert JabberGroup
+assert Mattermost
