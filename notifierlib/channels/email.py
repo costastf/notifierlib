@@ -6,7 +6,6 @@
 from emaillib import EasySender
 from notifierlib.notifierlib import Channel
 from jinja2 import Environment
-# from copy import deepcopy
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = 'plaintext'
