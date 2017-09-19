@@ -5,7 +5,8 @@
 
 from emaillib import EasySender
 from notifierlib.notifierlib import Channel
-
+from jinja2 import Environment
+# from copy import deepcopy
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = 'plaintext'
@@ -22,7 +23,9 @@ class Email(Channel):
                  password=None,
                  tls=False,
                  ssl=True,
-                 port=587):
+                 port=587,
+                 template=None,
+                 content='text'):
         super(Email, self).__init__()
         self.name = name
         self.recipient = recipient
@@ -33,12 +36,19 @@ class Email(Channel):
                                 ssl=ssl,
                                 tls=tls,
                                 port=port)
+        self.template = template
+        self.content = content
 
     def notify(self, **kwargs):
+        if self.template:
+            body = Environment().from_string(self.template).render(**kwargs)
+        else:
+            body = kwargs.get('message')
         result = self.email.send(sender=self.sender,
                                  recipients=self.recipient,
                                  subject=kwargs.get('subject'),
-                                 body=kwargs.get('message'))
+                                 body=body,
+                                 content=self.content)
         if not result:
             self._logger.error('Failed sending email')
         return result
