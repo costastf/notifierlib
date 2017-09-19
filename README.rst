@@ -25,6 +25,36 @@ Introduced concepts are:
 The payload of the notification methods is by convention a dictionary with at least a "subject" and a "message" key with the appropriate values.
 It is designed like this so it can be very easy to implement much more complex structures like templates without needed any domain knowledge on all the channels.
 
+Each channel can implement their own template as in instantiation argument in their class and handle the interpolation of variables in the notify method.
+
+An example could be :
+
+    from notifierlib.channels import Email
+    from notifierlib import Notifier, Group
+
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+    template='<b>{{subject}}</b> <i>{{message}}</i> <a href="http://google.com">link</a>.'
+
+    email=Email('email',
+                sender='sender@gmail.com',
+                recipient='recipient@gmail.com',
+                smtp_address='smtp.domain.com',
+                username='smtp_username',
+                password='smtp_password',
+                tls=True,
+                ssl=False,
+                port=587,
+                template=template,
+                content='html')
+
+    notifier=Notifier()
+    notifier.register(email)
+    notifier.broadcast(subject='this is a test of a template', message="""this is a nice and long message""")
+
+The above would render the template with the provided values on the notify method of the email channel before the mail gets sent.
+
+
 
 
 For a more detailed explanation please see the USAGE.rst file.

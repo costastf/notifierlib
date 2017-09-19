@@ -49,7 +49,7 @@ class XmppClient(sleekxmpp.ClientXMPP):
         self.process(block=True)
 
     def start(self, event):
-        _ = event
+        _ = event  # noqa
         self.send_message(mto=self.recipient,
                           mbody=self.message,
                           mtype='chat')
@@ -99,7 +99,7 @@ class XmppGroupClient(sleekxmpp.ClientXMPP):
         self.process(block=True)
 
     def start(self, event):
-        _ = event
+        _ = event  # noqa
         self.plugin['xep_0045'].joinMUC(self.room,
                                         self.nickname,
                                         # If a room password is needed, use:
@@ -135,7 +135,7 @@ class Jabber(Channel):
 
     def notify(self, **kwargs):
         message = kwargs.get('message')
-        _ = XmppClient(self.user,
+        _ = XmppClient(self.user,  # noqa
                        self.password,
                        self.recipient,
                        message,
@@ -174,7 +174,7 @@ class JabberGroup(Channel):
 
     def notify(self, **kwargs):
         message = kwargs.get('message')
-        _ = XmppGroupClient(self.user,
+        _ = XmppGroupClient(self.user,  # noqa
                             self.password,
                             self.room,
                             self.nickname,
