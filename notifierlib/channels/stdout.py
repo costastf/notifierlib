@@ -19,9 +19,11 @@ class Stdout(Channel):
 
     @staticmethod
     def _format_arguments(arguments):
+        if not arguments.keys():
+            return ''
+        output = []
         longer_string_length = len(max(arguments.keys(), key=len))
         keys = sorted(arguments.keys())
-        output = []
         for entry in keys:
             width = longer_string_length + 1 - len(entry)
             text = ' '.join([word.capitalize() for word in entry.split()])
