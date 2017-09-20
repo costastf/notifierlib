@@ -3,7 +3,7 @@
 # File: slack.py
 """Slack module file"""
 
-from slackclient import SlackClient
+import requests
 from notifierlib.notifierlib import Channel
 from jinja2 import Environment
 
@@ -37,8 +37,9 @@ class Slack(Channel):
         self.private = private
         self.channel = self.__determine_channel(channel)
         self.template = template
+        self.site = 'https://slack.com/api'
         self.reply_broadcast = reply_broadcast
-        self._bot = SlackClient(token=token)
+        self.__token = token
 
     def __determine_channel(self, channel):
         """
@@ -61,9 +62,24 @@ class Slack(Channel):
         else:
             body = kwargs.get('message')
 
+        response = requests.post(url='{site}/auth.test'.format(site=self.site),
+                                 data={'token': self.__token})
+        if not response.ok:
+            message = ('Error sending message to {url}.\n'
+                       'Message: {message}\n'
+                       'Response: {response}\n').format(url=response.url,
+                                                        message=body,
+                                                        reason=response.content)
+            self._logger.error(message)
+            return False
+
         arguments = {'channel': self.channel,
+                     'token': self.__token,
                      'text': body,
                      'reply_broadcast': self.reply_broadcast,
-                     'as_user': self._bot.api_call("auth.test").get('user_id')}
-        self._bot.api_call("chat.postMessage", **arguments)
+                     'as_user': response.json().get('user_id')}
+        response = requests.post(url='{site}/chat.postMessage'.format(site=self.site),
+                                 data=arguments)
+        self._logger.debug(('Message sent successfully. Response text: '
+                            '{response}').format(response=response.text))
         return True
