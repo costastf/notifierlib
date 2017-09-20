@@ -8,6 +8,7 @@ from stdout import Stdout
 from jabber import Jabber, JabberGroup
 from mattermost import Mattermost
 from telegram_ import Telegram
+from slack import Slack
 
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
@@ -21,3 +22,4 @@ assert Jabber
 assert JabberGroup
 assert Mattermost
 assert Telegram
+assert Slack

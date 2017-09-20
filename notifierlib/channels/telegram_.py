@@ -14,23 +14,22 @@ __date__ = '''19-09-2017'''
 
 
 class Telegram(Channel):
-
-    def __init__(self, name, token, chat_id, template=None, formating=None):
-
+    def __init__(self, name, token, chat_id, template=None, formatting=None):
         self._logger = logging.getLogger(self.__class__.__name__)
         super(Telegram, self).__init__(name)
         self.chat_id = chat_id
         self.template = template
-        self.formating = self._get_formating(formating)
+        self.formatting = self._get_formatting(formatting)
         self._bot = telegram.Bot(token)
 
-    def _get_formating(self, formating):
-        if formating:
-            if formating.upper() not in ['MARKDOWN', 'HTML']:
-                raise ValueError('Unsupported formating {}'.format(formating))
+    @staticmethod
+    def _get_formatting(formatting):
+        if formatting:
+            if formatting.upper() not in ['MARKDOWN', 'HTML']:
+                raise ValueError('Unsupported formatting {}'.format(formatting))
             else:
-                formating = formating.upper()
-        return formating
+                formatting = formatting.upper()
+        return formatting
 
     def notify(self, **kwargs):
         if self.template:
@@ -39,8 +38,8 @@ class Telegram(Channel):
             body = kwargs.get('message')
         arguments = {'chat_id': self.chat_id,
                      'text': body}
-        if self.formating:
-            parse_mode = getattr(telegram.ParseMode, self.formating)
+        if self.formatting:
+            parse_mode = getattr(telegram.ParseMode, self.formatting)
             arguments['parse_mode'] = parse_mode
         self._bot.send_message(**arguments)
         return True
