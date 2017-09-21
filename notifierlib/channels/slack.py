@@ -35,26 +35,11 @@ class Slack(Channel):
                  reply_broadcast=False):
         super(Slack, self).__init__(name)
         self.private = private
-        self.channel = self.__determine_channel(channel)
+        self.channel = channel if self.private else '#{channel}'.format(channel=channel)
         self.template = template
         self.site = 'https://slack.com/api'
         self.reply_broadcast = reply_broadcast
         self.__token = token
-
-    def __determine_channel(self, channel):
-        """
-        Channel name for Slack API
-
-        If 'private' is set to True, it is understood it is a Group and not a
-        Channel and so it is the string.
-
-        :param channel: string
-        :return: string
-        """
-        if self.private:
-            return channel
-        else:
-            return '#{channel}'.format(channel=channel)
 
     def notify(self, **kwargs):
         if self.template:
@@ -64,7 +49,7 @@ class Slack(Channel):
 
         response = requests.post(url='{site}/auth.test'.format(site=self.site),
                                  data={'token': self.__token})
-        if not response.ok:
+        if not response.json().get('ok'):
             message = ('Error sending message to {url}.\n'
                        'Message: {message}\n'
                        'Response: {response}\n').format(url=response.url,
@@ -80,6 +65,7 @@ class Slack(Channel):
                      'as_user': response.json().get('user_id')}
         response = requests.post(url='{site}/chat.postMessage'.format(site=self.site),
                                  data=arguments)
-        self._logger.debug(('Message sent successfully. Response text: '
-                            '{response}').format(response=response.text))
+        if response.json().get('ok'):
+            self._logger.debug(('Message sent successfully. Response text: '
+                                '{response}').format(response=response.text))
         return True
