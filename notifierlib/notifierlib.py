@@ -43,12 +43,12 @@ class Channel(object):
 
 
 class Group(object):
-    def __init__(self, groupname='', *channels):
+    def __init__(self, group_name='', *channels):
         self._logger = logging.getLogger('{base}.{suffix}'
                                          .format(base=LOGGER_BASENAME,
                                                  suffix=self.__class__.__name__)
                                          )
-        self.name = groupname
+        self.name = group_name
         self._channels = [self._validate_channel(channel)
                           for channel in channels]
         self._queue = Queue()

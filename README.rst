@@ -29,6 +29,8 @@ Each channel can implement their own template as in instantiation argument in th
 
 An example could be :
 
+.. code-block:: python
+
     from notifierlib.channels import Email
     from notifierlib import Notifier, Group
 
@@ -51,6 +53,7 @@ An example could be :
     notifier=Notifier()
     notifier.register(email)
     notifier.broadcast(subject='this is a test of a template', message="""this is a nice and long message""")
+
 
 The above would render the template with the provided values on the notify method of the email channel before the mail gets sent.
 
