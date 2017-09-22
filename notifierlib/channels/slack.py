@@ -42,6 +42,7 @@ class Slack(Channel):
         self.__token = token
 
     def notify(self, **kwargs):
+        result = True
         if self.template:
             body = Environment().from_string(self.template).render(**kwargs)
         else:
@@ -50,13 +51,12 @@ class Slack(Channel):
         response = requests.post(url='{site}/auth.test'.format(site=self.site),
                                  data={'token': self.__token})
         if not response.json().get('ok'):
-            message = ('Error sending message to {url}.\n'
-                       'Message: {message}\n'
+            message = ('Error getting user details to {url}.\n'
                        'Response: {response}\n').format(url=response.url,
-                                                        message=body,
-                                                        reason=response.content)
+                                                        response=response.content)
             self._logger.error(message)
-            return False
+            result = False
+            return result
 
         arguments = {'channel': self.channel,
                      'token': self.__token,
@@ -65,7 +65,13 @@ class Slack(Channel):
                      'as_user': response.json().get('user_id')}
         response = requests.post(url='{site}/chat.postMessage'.format(site=self.site),
                                  data=arguments)
-        if response.json().get('ok'):
+        if not response.json().get('ok'):
+            self._logger.error('Error while sending message to channel {channel} \n' \
+                               'Response text: {response}'.format(channel=self.channel,
+                                                                  response=response.content))
+            result = False
+
+        if result:
             self._logger.debug(('Message sent successfully. Response text: '
                                 '{response}').format(response=response.text))
-        return True
+        return result
