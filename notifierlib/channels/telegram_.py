@@ -5,7 +5,7 @@
 import telegram
 import logging
 from notifierlib.notifierlib import Channel
-from jinja2 import Environment
+from jinja2 import Environment as Env
 
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
@@ -15,7 +15,6 @@ __date__ = '''19-09-2017'''
 
 class Telegram(Channel):
     def __init__(self, name, token, chat_id, template=None, formatting=None):
-        self._logger = logging.getLogger(self.__class__.__name__)
         super(Telegram, self).__init__(name)
         self.chat_id = chat_id
         self.template = template
@@ -32,14 +31,16 @@ class Telegram(Channel):
         return formatting
 
     def notify(self, **kwargs):
-        if self.template:
-            body = Environment().from_string(self.template).render(**kwargs)
-        else:
-            body = kwargs.get('message')
-        arguments = {'chat_id': self.chat_id,
-                     'text': body}
-        if self.formatting:
-            parse_mode = getattr(telegram.ParseMode, self.formatting)
-            arguments['parse_mode'] = parse_mode
-        self._bot.send_message(**arguments)
+        try:
+            body = Env().from_string(self.template).render(**kwargs) if \
+                self.template else kwargs.get('message')
+            arguments = {'chat_id': self.chat_id,
+                         'text': body}
+            if self.formatting:
+                parse_mode = getattr(telegram.ParseMode, self.formatting)
+                arguments['parse_mode'] = parse_mode
+            self._bot.send_message(**arguments)
+        except Exception:
+            self._logger.exception()
+            return False
         return True

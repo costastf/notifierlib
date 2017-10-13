@@ -38,15 +38,19 @@ class Email(Channel):
         self.content = content
 
     def notify(self, **kwargs):
-        if self.template:
-            body = Environment().from_string(self.template).render(**kwargs)
-        else:
-            body = kwargs.get('message')
-        result = self.email.send(sender=self.sender,
-                                 recipients=self.recipient,
-                                 subject=kwargs.get('subject'),
-                                 body=body,
-                                 content=self.content)
-        if not result:
-            self._logger.error('Failed sending email')
-        return result
+        try:
+            if self.template:
+                body = Environment().from_string(self.template).render(**kwargs)
+            else:
+                body = kwargs.get('message')
+            result = self.email.send(sender=self.sender,
+                                     recipients=self.recipient,
+                                     subject=kwargs.get('subject'),
+                                     body=body,
+                                     content=self.content)
+            if not result:
+                self._logger.error('Failed sending email')
+        except Exception:
+            self._logger.exception()
+            return False
+        return True if result else False

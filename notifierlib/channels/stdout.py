@@ -36,5 +36,9 @@ class Stdout(Channel):
         return '\n'.join(output)
 
     def notify(self, **kwargs):
-        print(self._format_arguments(kwargs))
+        try:
+            print(self._format_arguments(kwargs))
+        except Exception:
+            self._logger.exception()
+            return False
         return True

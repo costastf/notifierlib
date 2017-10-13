@@ -54,7 +54,6 @@ An example could be :
     notifier.register(email)
     notifier.broadcast(subject='this is a test of a template', message="""this is a nice and long message""")
 
-
 The above would render the template with the provided values on the notify method of the email channel before the mail gets sent.
 
 

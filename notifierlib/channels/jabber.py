@@ -124,6 +124,7 @@ class Jabber(Channel):
                  ssl=True,
                  reattempt=False):
         super(Jabber, self).__init__(name)
+        self._logger = logging.getLogger(self.__class__.__name__)
         self.user = user_id
         self.password = password
         self.server = server
@@ -135,15 +136,19 @@ class Jabber(Channel):
 
     def notify(self, **kwargs):
         message = kwargs.get('message')
-        _ = XmppClient(self.user,  # noqa
-                       self.password,
-                       self.recipient,
-                       message,
-                       self.server,
-                       self.port,
-                       self.tls,
-                       self.ssl,
-                       self.reattempt)
+        try:
+            _ = XmppClient(self.user,  # noqa
+                           self.password,
+                           self.recipient,
+                           message,
+                           self.server,
+                           self.port,
+                           self.tls,
+                           self.ssl,
+                           self.reattempt)
+        except Exception:
+            self._logger.exception()
+            return False
         return True
 
 
@@ -161,6 +166,7 @@ class JabberGroup(Channel):
                  ssl=True,
                  reattempt=False):
         super(JabberGroup, self).__init__(name)
+        self._logger = logging.getLogger(self.__class__.__name__)
         self.user = user_id
         self.password = password
         self.nickname = nickname
@@ -174,15 +180,19 @@ class JabberGroup(Channel):
 
     def notify(self, **kwargs):
         message = kwargs.get('message')
-        _ = XmppGroupClient(self.user,  # noqa
-                            self.password,
-                            self.room,
-                            self.nickname,
-                            message,
-                            self.server,
-                            self.port,
-                            self.room_password,
-                            self.tls,
-                            self.ssl,
-                            self.reattempt)
+        try:
+            _ = XmppGroupClient(self.user,  # noqa
+                                self.password,
+                                self.room,
+                                self.nickname,
+                                message,
+                                self.server,
+                                self.port,
+                                self.room_password,
+                                self.tls,
+                                self.ssl,
+                                self.reattempt)
+        except Exception:
+            self._logger.exception()
+            return False
         return True
