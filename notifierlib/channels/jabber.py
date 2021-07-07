@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # File: jabber.py
+"""Jabber module file."""
 
-import sleekxmpp
 import logging
+import sleekxmpp
+
 from notifierlib.notifierlib import Channel
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>, Argiris Gounaris <agounaris@gmail.com>'''
@@ -11,10 +13,10 @@ __docformat__ = 'plaintext'
 __date__ = '''19-09-2017'''
 
 
-class XmppClient(sleekxmpp.ClientXMPP):
+class XmppClient(sleekxmpp.ClientXMPP):  # pylint: disable=too-many-instance-attributes
     """A basic SleekXMPP bot, logs in, sends message, logs out."""
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable=too-many-arguments
                  user_id,
                  password,
                  recipient,
@@ -49,6 +51,7 @@ class XmppClient(sleekxmpp.ClientXMPP):
         self.process(block=True)
 
     def start(self, event):
+        """Start."""
         _ = event  # noqa
         self.send_message(mto=self.recipient,
                           mbody=self.message,
@@ -56,10 +59,10 @@ class XmppClient(sleekxmpp.ClientXMPP):
         self.disconnect(wait=True)
 
 
-class XmppGroupClient(sleekxmpp.ClientXMPP):
+class XmppGroupClient(sleekxmpp.ClientXMPP):  # pylint: disable=too-many-instance-attributes
     """A basic SleekXMPP bot, logs in, sends message, logs out."""
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable=too-many-arguments
                  user_id,
                  password,
                  room,
@@ -99,6 +102,7 @@ class XmppGroupClient(sleekxmpp.ClientXMPP):
         self.process(block=True)
 
     def start(self, event):
+        """Start."""
         _ = event  # noqa
         self.plugin['xep_0045'].joinMUC(self.room,
                                         self.nickname,
@@ -111,9 +115,10 @@ class XmppGroupClient(sleekxmpp.ClientXMPP):
         self.disconnect(wait=True)
 
 
-class Jabber(Channel):
+class Jabber(Channel):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
+    """Models a channel for Jabber."""
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable=too-many-arguments
                  name,
                  user_id,
                  password,
@@ -135,6 +140,7 @@ class Jabber(Channel):
         self.reattempt = reattempt
 
     def notify(self, **kwargs):
+        """Notify."""
         message = kwargs.get('message')
         try:
             _ = XmppClient(self.user,  # noqa
@@ -146,14 +152,16 @@ class Jabber(Channel):
                            self.tls,
                            self.ssl,
                            self.reattempt)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             self._logger.exception()
             return False
         return True
 
 
-class JabberGroup(Channel):
-    def __init__(self,
+class JabberGroup(Channel):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
+    """Models a channel for a Jabber group."""
+
+    def __init__(self,  # pylint: disable=too-many-arguments
                  name,
                  user_id,
                  password,
@@ -179,6 +187,7 @@ class JabberGroup(Channel):
         self.reattempt = reattempt
 
     def notify(self, **kwargs):
+        """Notify."""
         message = kwargs.get('message')
         try:
             _ = XmppGroupClient(self.user,  # noqa
@@ -192,7 +201,7 @@ class JabberGroup(Channel):
                                 self.tls,
                                 self.ssl,
                                 self.reattempt)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             self._logger.exception()
             return False
         return True

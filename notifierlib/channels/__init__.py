@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # File: __init__.py
-"""channels package"""
+"""channels package."""
 
-from email import Email
-from stdout import Stdout
-from jabber import Jabber, JabberGroup
-from mattermost import Mattermost
-from telegram_ import Telegram
-from slack import Slack
+from .email import Email
+from .stdout import Stdout
+from .jabber import Jabber, JabberGroup
+from .mattermost import Mattermost
+from .telegram_ import Telegram
+from .slack import Slack
 
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''

@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # File: mattermost.py
+"""Mattermost module file."""
 
-
-import logging
-import requests
 import json
-from notifierlib.notifierlib import Channel
+import requests
 from jinja2 import Environment
+
+from notifierlib.notifierlib import Channel
 
 __author__ = '''Costas Tyfoxylos <costas.tyf@gmail.com>'''
 __docformat__ = 'plaintext'
 __date__ = '''19-09-2017'''
 
 
-class Mattermost(Channel):
+class Mattermost(Channel):  # pylint: disable=too-few-public-methods
+    """Models a mattermost channel."""
 
     def __init__(self, name, webhook_url, template=None):
         super(Mattermost, self).__init__(name)
@@ -22,6 +23,7 @@ class Mattermost(Channel):
         self.template = template
 
     def notify(self, **kwargs):
+        """Notify."""
         try:
             if self.template:
                 body = Environment().from_string(self.template).render(**kwargs)
@@ -34,17 +36,15 @@ class Mattermost(Channel):
                                      headers=headers,
                                      timeout=20)
             if not response.ok:
-                message = ('Error sending message to {url}.\n'
-                           'Message: {message}\n'
-                           'Response: '
-                           '{response}\n').format(url=self.url,
-                                                  message=body,
-                                                  reason=response.content)
+                message = (f'Error sending message to {self.url}.\n'
+                           f'Message: {body}\n'
+                           f'Response: '
+                           f'{response.content}\n')
                 self._logger.error(message)
                 return False
             self._logger.debug(('Message sent successfully. Response text: '
                                 '{response}').format(response=response.text))
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             self._logger.exception()
             return False
         return True

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # File: stdout.py
-
+"""Stdout module file."""
 
 from notifierlib.notifierlib import Channel
 
@@ -11,11 +11,8 @@ __docformat__ = 'plaintext'
 __date__ = '''18-09-2017'''
 
 
-class Stdout(Channel):
-    """A simple library to print to stdout"""
-
-    def __init__(self, name):
-        super(Stdout, self).__init__(name)
+class Stdout(Channel):  # pylint: disable=too-few-public-methods
+    """A simple library to print to stdout."""
 
     @staticmethod
     def _format_arguments(arguments):
@@ -36,9 +33,10 @@ class Stdout(Channel):
         return '\n'.join(output)
 
     def notify(self, **kwargs):
+        """Notify."""
         try:
             print(self._format_arguments(kwargs))
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             self._logger.exception()
             return False
         return True

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # File: slack.py
-"""Slack module file"""
+"""Slack module file."""
 
 import requests
-from notifierlib.notifierlib import Channel
 from jinja2 import Environment
+
+from notifierlib.notifierlib import Channel
 
 __author__ = '''Oriol Fabregas <fabregas.oriol@gmail.com>'''
 __docformat__ = 'plaintext'
@@ -13,12 +14,11 @@ __date__ = '''20-09-2017'''
 
 
 class AuthenticationError(Exception):
-    """If the response from the server is not successful in getting user id"""
+    """If the response from the server is not successful in getting user id."""
 
 
-class Slack(Channel):
-    """
-    Integration with Slack
+class Slack(Channel):  # pylint: disable=too-few-public-methods
+    """Integration with Slack.
 
     In a team, a channel is public by design, therefore the attribute 'private'
     is False by default. A private channel is just a group.
@@ -30,7 +30,8 @@ class Slack(Channel):
 
     +info https://api.slack.com/methods/chat.postMessage#channels
     """
-    def __init__(self,
+
+    def __init__(self,  # pylint: disable=too-many-arguments
                  name,
                  token,
                  channel,
@@ -57,6 +58,7 @@ class Slack(Channel):
         return response.json().get('user_id')
 
     def notify(self, **kwargs):
+        """Notify."""
         try:
             if self.template:
                 body = Environment().from_string(self.template).render(**kwargs)
@@ -78,7 +80,7 @@ class Slack(Channel):
             else:
                 self._logger.debug('Message sent successfully.')
                 result = True
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             self._logger.exception()
             return False
         return result
